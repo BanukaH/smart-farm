@@ -1,0 +1,103 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "sensors": {
+      ".read": "auth != null",
+      "$node": {
+        ".write": "auth != null",
+        "soilMoisture": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "temperature": {
+          ".validate": "newData.isNumber() && newData.val() > -40 && newData.val() < 80"
+        },
+        "humidity": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        }
+      }
+    },
+    "history": {
+      ".read": "auth != null",
+      "$node": {
+        ".write": "auth != null",
+        ".indexOn": [
+          "ts"
+        ],
+        "$id": {
+          ".validate": "newData.hasChildren(['ts', 'soilMoisture'])",
+          "ts": {
+            ".validate": "newData.isNumber()"
+          },
+          "soilMoisture": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "temperature": {
+            ".validate": "newData.isNumber() && newData.val() > -40 && newData.val() < 80"
+          },
+          "humidity": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "light": {
+            ".validate": "newData.isNumber() && newData.val() >= 0"
+          },
+          "relayOn": {
+            ".validate": "newData.isBoolean()"
+          }
+        }
+      }
+    },
+    "pump": {
+      "active": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "zones": {
+      ".read": "auth != null",
+      "$node": {
+        ".write": "auth != null",
+        "name": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "crop": {
+          ".validate": "newData.isString() && newData.val().length <= 40"
+        },
+        "mode": {
+          ".validate": "newData.val() === 'manual' || newData.val() === 'auto'"
+        },
+        "soilLow": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "soilHigh": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "soilAlert": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+        },
+        "tempAlert": {
+          ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 80"
+        },
+        "icon": {
+          ".validate": "newData.isString() && newData.val().length <= 8"
+        }
+      }
+    },
+    "alerts": {
+      ".read": "auth != null",
+      ".indexOn": [
+        "ts"
+      ],
+      "$id": {
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['ts', 'node', 'type'])",
+        "ts": {
+          ".validate": "newData.isNumber()"
+        },
+        "read": {
+          ".validate": "newData.isBoolean()"
+        }
+      }
+    }
+  }
+}
